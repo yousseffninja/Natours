@@ -1,5 +1,6 @@
 const express = require('express');
 const tourController = require('../controllers/tourController');
+const catchAsync = require('../utils/catchAsync');
 
 const router = express.Router();
 
