@@ -9,8 +9,8 @@ router.param('id', (req, res, next, val) => {
   next();
 });
 
-router
-    .post('/signup', authController.signup)
+router.post('/signup', authController.signup);
+router.post('/login', authController.login);
 
 router
     .route('/')
