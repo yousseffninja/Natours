@@ -21,6 +21,12 @@ const HandleValidationErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+const handleJWTError = () =>
+  new AppError('Invalid token. please log in again', 401);
+
+const handleJWTExpireError = () =>
+  new AppError('Your token has expired, Please log in again', 401);
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -60,16 +66,19 @@ module.exports = (err, req, res, next) => {
   if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
+    // eslint-disable-next-line node/no-unsupported-features/es-syntax
     let error = { ...err };
-    // console.log(error.errors.name.name, "fdf");
+    console.log(error.name, 'fdf1');
     if (error.name === 'CastError') {
       error = handleCastErrorDB(error);
-    }
-    if (error.code === 11000) {
+    } else if (error.code === 11000) {
       // console.log("here");
       error = handleDuplicateFieldsDB(error);
-    }
-    if (error.errors.name.name === 'ValidatorError') {
+    } else if (error.name === 'JsonWebTokenError') {
+      error = handleJWTError();
+    } else if (error.name === 'TokenExpiredError') {
+      error = handleJWTExpireError();
+    } else if (error.errors.name.name === 'ValidatorError') {
       error = HandleValidationErrorDB(error);
     }
 
