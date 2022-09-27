@@ -75,15 +75,6 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 
 app.all('*', (req, res, next) => {
-  // res.status(404).json({
-  //   status: 'fail',
-  //   message: `can't find ${req.originalUrl} on our server`,
-  // });
-
-  // const err = new Error(`can't find ${req.originalUrl} on our server`);
-  // err.status = 'fail';
-  // err.statusCode = 404;
-
   next(new AppError(`can't find ${req.originalUrl} on our server`, 404));
 });
 
